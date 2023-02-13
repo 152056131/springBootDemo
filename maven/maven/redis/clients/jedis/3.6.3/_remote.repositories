@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Feb 13 09:37:48 CST 2023
+jedis-3.6.3.pom>nexus-aliyun=
+jedis-3.6.3.jar>nexus-aliyun=
