@@ -8,6 +8,7 @@ import com.example.springbootdemo.service.loginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @Api("登录测试")
+@Slf4j
 public class loginController {
 
     @Autowired
@@ -53,10 +56,25 @@ public class loginController {
         int count = mp.update(null, wrapper);
         return count;
     }
+    @ApiOperation("查询案例测试")
+    @GetMapping(value = "mpquery")
+    public List mpquery(String username,String password){
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("username",username);
+        wrapper.eq("password",password);
+        log.info("info:"+username);
+        return mp.selectList(wrapper);
+    }
+
 
     @ApiOperation("登录测试案例")
     @GetMapping(value = "/hello")
-    public String test() {
-        return loginservice.login("abc", "123");
+    public List<user> test() {
+        String username = "ysk";
+        String password = "123456";
+        log.info("info"+username);
+        log.debug("debug"+password);
+        log.error("error"+username);
+        return loginservice.login(username,password);
     }
 }
