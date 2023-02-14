@@ -2,15 +2,14 @@ package com.example.springbootdemo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.springbootdemo.bean.user;
 import com.example.springbootdemo.dao.mpLoginMapper;
 import com.example.springbootdemo.service.loginService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -64,6 +63,14 @@ public class loginController {
         wrapper.eq("password",password);
         log.info("info:"+username);
         return mp.selectList(wrapper);
+    }
+    @ApiOperation("分页案例测试")
+    @GetMapping(value = "mpipage")
+    public Page<user> mpipage(int pageNum, int pageSize){
+        Page<user> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<user> queryWrapper = new QueryWrapper<>();
+        return mp.selectPage(page,queryWrapper);
+
     }
 
 
