@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
@@ -52,33 +53,56 @@ public class loginController {
         int count = mp.update(null, wrapper);
         return count;
     }
+
     @ApiOperation("查询案例测试")
     @GetMapping(value = "mpquery")
-    public List mpquery(String username,String password){
+    public List mpquery(String username, String password) {
         QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("username",username);
-        wrapper.eq("password",password);
-        log.info("info:"+username);
+        wrapper.eq("username", username);
+        wrapper.eq("password", password);
+        log.info("info:" + username);
         return mp.selectList(wrapper);
     }
+
     @ApiOperation("分页案例测试")
     @GetMapping(value = "mpipage")
-    public Page<user> mpipage(int pageNum, int pageSize){
+    public Page<user> mpipage(int pageNum, int pageSize) {
         Page<user> page = new Page<>(pageNum, pageSize);
         QueryWrapper<user> queryWrapper = new QueryWrapper<>();
-        return mp.selectPage(page,queryWrapper);
+        return mp.selectPage(page, queryWrapper);
 
     }
 
+    @GetMapping(value = "surprise")
+    public void surprise() throws InterruptedException {
+        int count = 0;
+        for (float y = 2.5f; y > -2.0f; y -= 0.12f) {
+            for (float x = -2.3f; x < 2.3f; x += 0.041f) {
+                float a = x * x + y * y - 4f;
+                if ((a * a * a - x * x * y * y * y) < -0.0f) {
+                    String str = "love";
+                    int num = count % str.length();
+                    System.err.print(str.charAt(num));
+                    count++;
+                } else {
+                    System.err.print(" ");
+                }
+            }
+            System.err.println();
+            Thread.sleep(100);
+        }
+        System.out.println("如果能好好被爱！");
+        System.out.println("谁不想呆在一个人身边一年有一年呢！");
+    }
 
     @ApiOperation("登录测试案例")
     @GetMapping(value = "/hello")
     public List<user> test() {
         String username = "ysk";
         String password = "123456";
-        log.info("info"+username);
-        log.debug("debug"+password);
-        log.error("error"+username);
-        return loginservice.login(username,password);
+        log.info("info" + username);
+        log.debug("debug" + password);
+        log.error("error" + username);
+        return loginservice.login(username, password);
     }
 }
