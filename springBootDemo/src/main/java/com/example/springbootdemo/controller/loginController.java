@@ -8,22 +8,31 @@ import com.example.springbootdemo.dao.mpLoginMapper;
 import com.example.springbootdemo.service.loginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @Api("登录测试")
 @Slf4j
+@RequiredArgsConstructor
 public class loginController {
 
     @Autowired
     private loginService loginservice;
     @Autowired
     private mpLoginMapper mp;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @ApiOperation("添加测试案例")
     @GetMapping(value = "/mpinsert")
@@ -73,28 +82,6 @@ public class loginController {
 
     }
 
-    @GetMapping(value = "surprise")
-    public void surprise() throws InterruptedException {
-        int count = 0;
-        for (float y = 2.5f; y > -2.0f; y -= 0.12f) {
-            for (float x = -2.3f; x < 2.3f; x += 0.041f) {
-                float a = x * x + y * y - 4f;
-                if ((a * a * a - x * x * y * y * y) < -0.0f) {
-                    String str = "love";
-                    int num = count % str.length();
-                    System.err.print(str.charAt(num));
-                    count++;
-                } else {
-                    System.err.print(" ");
-                }
-            }
-            System.err.println();
-            Thread.sleep(100);
-        }
-        System.out.println("如果能好好被爱！");
-        System.out.println("谁不想呆在一个人身边一年有一年呢！");
-    }
-
     @ApiOperation("登录测试案例")
     @GetMapping(value = "/hello")
     public List<user> test() {
@@ -104,5 +91,25 @@ public class loginController {
         log.debug("debug" + password);
         log.error("error" + username);
         return loginservice.login(username, password);
+    }
+
+
+
+    /**
+     * rabbitmq发送消息
+     */
+    @ApiOperation("rabbitmq案例")
+    @GetMapping(value = "sendrabbit")
+    public String sendMsg(){
+        String messageId = String.valueOf(UUID.randomUUID());
+        String messageData = "test message, hello!";
+        String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Map<String,Object> map=new HashMap<>();
+        map.put("messageId",messageId);
+        map.put("messageData",messageData);
+        map.put("createTime",createTime);
+        //将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange
+        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirectRouting", map);
+        return "ok";
     }
 }

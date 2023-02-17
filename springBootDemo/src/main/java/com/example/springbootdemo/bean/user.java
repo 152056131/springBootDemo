@@ -13,8 +13,10 @@ import lombok.experimental.Accessors;
  */
 @ApiModel
 public class user {
-    @ApiModelProperty(value = "用户名")
-    public String username;
-    @ApiModelProperty(value = "密码")
-    public String password;
+    private Long id;
+    private String username;
+    private String password;
+    private String email;
+
+
 }
