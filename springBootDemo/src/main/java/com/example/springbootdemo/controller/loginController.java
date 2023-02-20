@@ -12,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -93,27 +94,39 @@ public class loginController {
     }
 
 
-
     /**
      * rabbitmq发送消息
      */
     @ApiOperation("rabbitmq案例")
     @GetMapping(value = "sendrabbit")
-    public String sendMsg(){
+    public String sendMsg() {
         String messageId = String.valueOf(UUID.randomUUID());
         String messageData = "test message, hello!";
         String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Map<String,Object> map=new HashMap<>();
-        map.put("messageId",messageId);
-        map.put("messageData",messageData);
-        map.put("createTime",createTime);
+        Map<String, Object> map = new HashMap<>();
+        map.put("messageId", messageId);
+        map.put("messageData", messageData);
+        map.put("createTime", createTime);
         //将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange
         rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirectRouting", map);
         return "ok";
     }
 
-    @Scheduled(cron = "${Scheduling.cron}")
-    public void Scheduling(){
-        System.out.println("测试定时任务");
+    /**
+     * 事件监听
+     */
+    @ApiOperation("事件监听")
+    @GetMapping("eventListener")
+    public void eventListener() {
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+
+        // 发布一个事件
+        applicationContext.publishEvent(new ApplicationEvent(new String("我发布的事件")) {
+        });
+
+        // 关闭容器
+        applicationContext.close();
     }
+
+
 }
