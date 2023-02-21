@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableRabbit
 @EnableScheduling
 @EnableAsync
-@MapperScan("com.example.springbootdemo.dao")
+@MapperScan("com.example.springbootdemo.common.mapper")
 public class SpringBootDemoApplication {
 
     public static void main(String[] args) {

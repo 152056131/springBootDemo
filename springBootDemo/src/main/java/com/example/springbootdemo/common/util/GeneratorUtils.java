@@ -1,4 +1,4 @@
-package com.example.springbootdemo.util;
+package com.example.springbootdemo.common.util;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

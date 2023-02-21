@@ -1,8 +1,7 @@
-package com.example.springbootdemo.job;
+package com.example.springbootdemo.common.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
-import org.quartz.impl.StdScheduler;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

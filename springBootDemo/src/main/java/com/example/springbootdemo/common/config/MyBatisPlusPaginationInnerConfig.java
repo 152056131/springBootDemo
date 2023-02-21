@@ -1,4 +1,4 @@
-package com.example.springbootdemo.config;
+package com.example.springbootdemo.common.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;

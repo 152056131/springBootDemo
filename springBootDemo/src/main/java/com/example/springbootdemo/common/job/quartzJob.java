@@ -1,11 +1,11 @@
-package com.example.springbootdemo.job;
+package com.example.springbootdemo.common.job;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.springbootdemo.bean.jobTask;
-import com.example.springbootdemo.dao.jobTaskMapper;
+import com.example.springbootdemo.common.entity.JobTask;
+
+import com.example.springbootdemo.common.mapper.JobTaskMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class quartzJob extends QuartzJobBean{
 
     @Resource
-    jobTaskMapper mapper;
+    JobTaskMapper mapper;
     @Resource
     Scheduler scheduler;
 
@@ -28,9 +28,9 @@ public class quartzJob extends QuartzJobBean{
 
     //@Scheduled(cron = "0 0/1 * * * ?")
     public void loadTask() throws Exception {
-        QueryWrapper<jobTask> wrapper = new QueryWrapper<jobTask>();
-        List<jobTask> list = mapper.selectList(wrapper);
-        for (jobTask jobTask:list) {
+        QueryWrapper<JobTask> wrapper = new QueryWrapper<JobTask>();
+        List<JobTask> list = mapper.selectList(wrapper);
+        for (JobTask jobTask:list) {
             //获取一个要修改的触发器的资料，身份，key
             TriggerKey triggerKey = new TriggerKey(jobTask.getName(), jobTask.getGroupid());
             //根据key获取要更改的具体的CronTrigger触发器
@@ -45,7 +45,7 @@ public class quartzJob extends QuartzJobBean{
 
     }
 
-    public void createJob(jobTask jobTask) throws Exception {
+    public void createJob(JobTask jobTask) throws Exception {
         //批量创建任务
         JobDetail jobDetail = JobBuilder.newJob((Class<? extends Job>) Class.forName(jobTask.getClassname()))
                 .withIdentity(jobTask.getName(), jobTask.getGroupid())
@@ -74,7 +74,7 @@ public class quartzJob extends QuartzJobBean{
      * @param time 修改后的Cron表达式
      * @throws Exception
      */
-    public void updateJob(jobTask jobTask,String time) throws Exception {
+    public void updateJob(JobTask jobTask,String time) throws Exception {
 
         //创建一个要修改的触发器的资料，身份
         TriggerKey triggerKey = new TriggerKey(jobTask.getName(), jobTask.getGroupid());
