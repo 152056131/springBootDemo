@@ -1,5 +1,6 @@
 package com.example.springbootdemo.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -90,6 +91,7 @@ public class loginController {
         log.info("info" + username);
         log.debug("debug" + password);
         log.error("error" + username);
+        System.out.println("测试案例："+System.getProperty("user.dir"));
         return loginservice.login(username, password);
     }
 

@@ -26,7 +26,7 @@ public class quartzJob extends QuartzJobBean{
         scheduler.start();
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    //@Scheduled(cron = "0 0/1 * * * ?")
     public void loadTask() throws Exception {
         QueryWrapper<jobTask> wrapper = new QueryWrapper<jobTask>();
         List<jobTask> list = mapper.selectList(wrapper);
