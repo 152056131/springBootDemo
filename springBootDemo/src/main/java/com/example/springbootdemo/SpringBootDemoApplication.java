@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @MapperScan("com.example.springbootdemo.common.mapper")
 public class SpringBootDemoApplication {
-
+        //123456
     public static void main(String[] args) {
         SpringApplication.run(SpringBootDemoApplication.class, args);
     }
